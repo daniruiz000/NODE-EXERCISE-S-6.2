@@ -192,7 +192,7 @@ authorRouter.delete("/:id", isAuth, async (req: any, res: Response, next: NextFu
   try {
     const id = req.params.id; //  Recogemos el id de los parametros de la ruta.
 
-    if (req.author.id !== id && req.author.email !== "admin@gmail.com") {
+    if (req.user.id !== id && req.user.email !== "admin@gmail.com") {
       return res.status(401).json({ error: "No tienes autorización para realizar esta operación" });
     }
 
