@@ -1,0 +1,629 @@
+{
+  "info": {
+    "_postman_id": "d7f45acd-8a3c-45e4-9ea8-c4fea8eef114",
+    "name": "NODE API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "26678393",
+    "_collection_link": "https://lunar-shadow-598419.postman.co/workspace/My-Workspace~bb2fabbe-669e-40aa-85ab-0d5b9d85e36d/collection/26678393-d7f45acd-8a3c-45e4-9ea8-c4fea8eef114?action=share&creator=26678393&source=collection_link"
+  },
+  "item": [
+    {
+      "name": "BOOK COLLECTION",
+      "item": [
+        {
+          "name": "Book",
+          "item": [
+            {
+              "name": "Get Books",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/book",
+                  "host": ["{{base_url}}"],
+                  "path": ["book"],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "5",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Book by Id",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/book/646600899de20b0138f1cf81",
+                  "host": ["{{base_url}}"],
+                  "path": ["book", "646600899de20b0138f1cf81"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Book by Title",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/book/title/numquam",
+                  "host": ["{{base_url}}"],
+                  "path": ["book", "title", "numquam"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Book",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"title\": \"f\",\r\n    \"pages\": 5\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/book",
+                  "host": ["{{base_url}}"],
+                  "path": ["book"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Book",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text",
+                    "disabled": true
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "disabled": true
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDY1YTcyMGQ2ZGE5NzBhNDEyNmUyYTQiLCJ1c2VyRW1haWwiOiJnYWJpQGdtYWlsLmNvbSIsImlhdCI6MTY4NDM4MzU4MSwiZXhwIjoxNjg0NDY5OTgxfQ.R4b4u7KLRmfTjUgdobX2S-URzZ6B5zDk3eZyw9SIJRA",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n\"title\": \"645a14fad4ecce2924de6be3\",\r\n\"pages\": 250\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/book/645b812b066bc0f345957296",
+                  "host": ["{{base_url}}"],
+                  "path": ["book", "645b812b066bc0f345957296"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete  Book by Id",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/book/6454c4481d334a820f0529f9",
+                  "host": ["{{base_url}}"],
+                  "path": ["book", "6454c4481d334a820f0529f9"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Reset Book Seed",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/book/reset?all=true",
+                  "host": ["{{base_url}}"],
+                  "path": ["book", "reset"],
+                  "query": [
+                    {
+                      "key": "all",
+                      "value": "true"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Publisher",
+          "item": [
+            {
+              "name": "Get Publisher",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/publisher?page=1&limit=10",
+                  "host": ["{{base_url}}"],
+                  "path": ["publisher"],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Publisherby Id",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/publisher/645a18db43dc267395408ecb?includeBooks=true",
+                  "host": ["{{base_url}}"],
+                  "path": ["publisher", "645a18db43dc267395408ecb"],
+                  "query": [
+                    {
+                      "key": "includeBooks",
+                      "value": "true"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Publisherby Name",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/publisher/name/RGB",
+                  "host": ["{{base_url}}"],
+                  "path": ["publisher", "name", "RGB"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Publisher",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"Prueba Nombre\",\r\n    \"country\": \"portugal\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/publisher/",
+                  "host": ["{{base_url}}"],
+                  "path": ["publisher", ""]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Publisher",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"     portuas       \",\r\n    \"country\": \"    spain       \"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/publisher/645a12428f2b9bc92c915f41",
+                  "host": ["{{base_url}}"],
+                  "path": ["publisher", "645a12428f2b9bc92c915f41"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Publisherby Id",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/publisher/64541006279b7028a25569c2",
+                  "host": ["{{base_url}}"],
+                  "path": ["publisher", "64541006279b7028a25569c2"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Reset Publisher",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/publisher/reset",
+                  "host": ["{{base_url}}"],
+                  "path": ["publisher", "reset"]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Author",
+          "item": [
+            {
+              "name": "Get Author",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/author?page=1",
+                  "host": ["{{base_url}}"],
+                  "path": ["author"],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Author by Id",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/author/645a17da03a6a71c703cd878?includeBooks=true",
+                  "host": ["{{base_url}}"],
+                  "path": ["author", "645a17da03a6a71c703cd878"],
+                  "query": [
+                    {
+                      "key": "includeBooks",
+                      "value": "true"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Author by Name",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/author/name/Gabriel García Márquez",
+                  "host": ["{{base_url}}"],
+                  "path": ["author", "name", "Gabriel García Márquez"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Author",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"Prueba Nombre\",\r\n    \"country\": \"SPAIN\",\r\n    \"password\": \"12121212\",\r\n    \"email\": \"prueba@gmail.com\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/author/",
+                  "host": ["{{base_url}}"],
+                  "path": ["author", ""]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Author",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text",
+                    "disabled": true
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "disabled": true
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JZCI6IjY0NjYwMDg5OWRlMjBiMDEzOGYxY2ZiNSIsImF1dGhvckVtYWlsIjoiZ2FiaUBnbWFpbC5jb20iLCJpYXQiOjE2ODQ0MDY2NzYsImV4cCI6MTY4NDQ5MzA3Nn0.rGoAcvEA8pHKC0hLPDEdIWj54mv_TW0wP5oo2fzI8vM",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"Prueba Update\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/author/646600899de20b0138f1cfb7",
+                  "host": ["{{base_url}}"],
+                  "path": ["author", "646600899de20b0138f1cfb7"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Author by Id",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JJZCI6IjY0NjVhZmFjZmRhMzcxMGY3NDk4OGQ0OCIsImF1dGhvckVtYWlsIjoiZ2FiaUBnbWFpbC5jb20iLCJpYXQiOjE2ODQ0MDA1MjcsImV4cCI6MTY4NDQ4NjkyN30.Pc69WLOdGxByD8fDGmI1H4xUlmfFWxpiJPDvs4HA9xg",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/author/6465afacfda3710f74988d48",
+                  "host": ["{{base_url}}"],
+                  "path": ["author", "6465afacfda3710f74988d48"],
+                  "query": [
+                    {
+                      "key": "email",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "password",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "",
+                      "value": null,
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Reset Author",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/author/reset",
+                  "host": ["{{base_url}}"],
+                  "path": ["author", "reset"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Image Upload",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "image",
+                      "type": "file",
+                      "src": "/C:/Users/danie/Downloads/borjes.jpg"
+                    },
+                    {
+                      "key": "authorId",
+                      "value": "6465afacfda3710f74988d48",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{base_url}}/author/image-upload",
+                  "host": ["{{base_url}}"],
+                  "path": ["author", "image-upload"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Login",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "    {   \"email\": \"gabi@gmail.com\",\r\n        \"password\": \"12345678\"\r\n    }    ",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/author/login",
+                  "host": ["{{base_url}}"],
+                  "path": ["author", "login"]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "File Uploads",
+          "item": [
+            {
+              "name": "File Upload",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "file",
+                      "type": "file",
+                      "src": "/C:/Users/danie/Downloads/descarga.jpg"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{base_url}}/file-upload",
+                  "host": ["{{base_url}}"],
+                  "path": ["file-upload"]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Home",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}",
+          "host": ["{{base_url}}"]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ]
+}
