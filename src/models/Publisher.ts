@@ -1,6 +1,6 @@
 //  Importamos Mongoose
 import mongoose from "mongoose";
-import { type iBook } from "./Book";
+import { type IBook } from "./Book";
 
 // Declaramos nuestro esquema que nos permite declarar nuestros objetos y crearle restricciones.
 const Schema = mongoose.Schema;
@@ -22,7 +22,7 @@ enum AllowedCountries {
 export interface IPublisher {
   name: string;
   country: AllowedCountries;
-  books?: iBook[];
+  books?: IBook[];
 }
 const publisherSchema = new Schema<IPublisher>(
   {

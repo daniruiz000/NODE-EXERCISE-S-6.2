@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 import validator from "validator";
 import bcrypt from "bcrypt";
-import { type iBook } from "./Book";
+import { type IBook } from "./Book";
 
 // Declaramos nuestro esquema que nos permite declarar nuestros objetos y crearle restricciones.
 const Schema = mongoose.Schema;
@@ -15,7 +15,7 @@ interface IAuthor {
   name: string;
   country: string;
   image: string;
-  books?: iBook[];
+  books?: IBook[];
 }
 
 // Enum de países permitidos

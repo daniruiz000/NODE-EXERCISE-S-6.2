@@ -2,6 +2,8 @@ import express from "express";
 
 import { Book } from "../models/Book";
 
+import { checkParams } from "../middlewares/checkParams.middleware";
+
 import { resetBooks } from "../utils/resetBooks";
 import { resetAuthors } from "../utils/resetAuthors";
 import { resetPublishers } from "../utils/resetPublishers";
@@ -23,12 +25,12 @@ export const bookRouter = express.Router();
 por página para no saturar al navegador (CRUD: READ):
 */
 
-bookRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
+bookRouter.get("/", checkParams, async (req: Request, res: Response, next: NextFunction) => {
   // Si funciona la lectura...
   try {
     // Recogemos las query params de esta manera req.query.parametro.
-    const page = req.query.page ? parseInt(req.query.page as string) : 1;
-    const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
+    const limit = req.query.limit as any;
+    const page = req.query.page as any;
 
     const books = await Book.find() // Devolvemos los books si funciona. Con modelo.find().
       .populate(["author", "publisher"])

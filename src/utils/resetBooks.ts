@@ -1,7 +1,6 @@
 // Importamos el modelo
 import { Book } from "../models/Book";
 
-// Creamos 50 books aleatoriamente y los vamos añadiendo al array de books:
 const bookList = [
   { title: "To Kill a Mockingbird", pages: 281 },
   { title: "1984", pages: 328 },
@@ -62,7 +61,11 @@ export const resetBooks = async (): Promise<void> => {
   try {
     await Book.collection.drop(); //  Esperamos a que borre los documentos de la colección book de la BBDD.
     console.log("Borrados books");
-    await Book.insertMany(bookList); //  Esperamos a que inserte los nuevos documentos creados en la colección book de la BBDD.
+    const documents = bookList.map((book) => new Book(book));
+    for (let i = 0; i < documents.length; i++) {
+      const document = documents[i];
+      await document.save();
+    }
     console.log("Creados books correctamente");
   } catch (error) {
     //  Si hay error lanzamos el error por consola.

@@ -4,10 +4,10 @@ import multer from "multer";
 import fs from "fs";
 import bcrypt from "bcrypt";
 
-import { isAuth } from "../middlewares/author.middleware";
-
 import { Author } from "../models/Author";
 import { Book } from "../models/Book";
+import { isAuth } from "../middlewares/auth.middleware";
+import { checkParams } from "../middlewares/checkParams.middleware"
 
 import { resetAuthors } from "../utils/resetAuthors";
 import { generateToken } from "../utils/token";
@@ -27,36 +27,11 @@ export const authorRouter = express.Router();
 // ------------------------------- ENDPOINTS DE /author ---------------------------------------
 // --------------------------------------------------------------------------------------------
 
-// Middleware previo al get de autores para comprobar los parametros:
-
-authorRouter.get("/", (req: Request, res: Response, next: NextFunction) => {
-  try {
-    console.log("Estamos en el Middleware que comprueba los parámetros");
-
-    const page = req.query.page ? parseInt(req.query.page as string) : 1;
-    const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
-
-    if (!isNaN(page) && !isNaN(limit) && page > 0 && limit > 0) {
-      req.query.page = page as any;
-      req.query.limit = limit as any;
-      next();
-    } else {
-      console.log("Parametros no validos:");
-      console.log(JSON.stringify(req.query));
-      res.status(400).json({ error: "Params are not valid" });
-    }
-  } catch (error) {
-    next(error);
-  }
-});
-
-//  ------------------------------------------------------------------------------------------
-
 /*  Endpoint para recuperar todos los authors de manera paginada en función de un limite de elementos a mostrar
 por página para no saturar al navegador (CRUD: READ):
 */
 
-authorRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
+authorRouter.get("/", checkParams, async (req: Request, res: Response, next: NextFunction) => {
   // Si funciona la lectura...
   try {
     // Recogemos las query params de esta manera req.query.parametro.
@@ -151,7 +126,7 @@ authorRouter.get("/name/:name", async (req: Request, res: Response, next: NextFu
 
 //  Endpoint para añadir elementos (CRUD: CREATE):
 
-authorRouter.post("/", async (req: Request, res: Response, next: NextFunction) => {
+authorRouter.post("/", async (req: any, res: Response, next: NextFunction) => {
   // Si funciona la escritura...
   try {
     const author = new Author(req.body); //     Un nuevo author es un nuevo modelo de la BBDD que tiene un Scheme que valida la estructura de esos datos que recoge del body de la petición.
@@ -194,13 +169,13 @@ authorRouter.delete("/:id", isAuth, async (req: any, res: Response, next: NextFu
 
     if (req.user.id !== id && req.user.email !== "admin@gmail.com") {
       return res.status(401).json({ error: "No tienes autorización para realizar esta operación" });
-    }
-
-    const authorDeleted = await Author.findByIdAndDelete(id); // Esperamos a que nos devuelve la info del author eliminado que busca y elimina con el metodo findByIdAndDelete(id del author a eliminar).
-    if (authorDeleted) {
-      res.json(authorDeleted); //  Devolvemos el author eliminado en caso de que exista con ese id.
     } else {
-      res.status(404).json({}); //  Devolvemos un código 404 y un objeto vacio en caso de que no exista con ese id.
+      const authorDeleted = await Author.findByIdAndDelete(id); // Esperamos a que nos devuelve la info del author eliminado que busca y elimina con el metodo findByIdAndDelete(id del author a eliminar).
+      if (authorDeleted) {
+        return res.json(authorDeleted); //  Devolvemos el author eliminado en caso de que exista con ese id.
+      } else {
+        return res.status(404).json({}); //  Devolvemos un código 404 y un objeto vacio en caso de que no exista con ese id.
+      }
     }
 
     // Si falla el borrado...
@@ -222,7 +197,7 @@ authorRouter.put("/:id", isAuth, async (req: any, res: Response, next: NextFunct
   try {
     const id = req.params.id; //  Recogemos el id de los parametros de la ruta.
 
-    if (req.author.id !== id && req.author.email !== "admin@gmail.com") {
+    if (req.user.id !== id && req.user.email !== "admin@gmail.com") {
       return res.status(401).json({ error: "No tienes autorización para realizar esta operación" });
     }
 
@@ -255,8 +230,13 @@ fetch("http://localhost:3000/author/id del author a actualizar",{"body": JSON.st
 //  Endpoint para asociar una imágen a una author:
 //  Hacemos uso del middleware que nos facilita multer para guardar la imágen en la carpeta de estáticos public.
 
-authorRouter.post("/image-upload", upload.single("image"), async (req: Request, res: Response, next: NextFunction) => {
+authorRouter.post("/image-upload", isAuth, upload.single("image"), async (req: any, res: Response, next: NextFunction) => {
   try {
+    const id = req.params.id; //  Recogemos el id de los parametros de la ruta.
+
+    if (req.user.id !== id && req.user.email !== "admin@gmail.com") {
+      return res.status(401).json({ error: "No tienes autorización para realizar esta operación" });
+    }
     // Renombrado de la imágen
     const originalname = req.file?.originalname as string;
     const path = req.file?.path as string;

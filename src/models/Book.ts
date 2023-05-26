@@ -5,15 +5,15 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 // Interface de Book
-export interface iBook {
+export interface IBook {
   title: string;
-  author: mongoose.ObjectId;
+  author: mongoose.Types.ObjectId;
   pages: number;
-  publisher: mongoose.ObjectId;
+  publisher: mongoose.Types.ObjectId;
 }
 
 // Creamos esquema del book:
-const bookSchema = new Schema<iBook>(
+const bookSchema = new Schema<IBook>(
   {
     title: { type: String, trim: true, minLength: [3, " Al menos tres letras para el título"], maxLength: [40, "Título demasiado largo, máximo de 20 caracteres"], required: true },
     author: { type: mongoose.Schema.Types.ObjectId, ref: "Author", required: false }, // Identificará el id como una referencia de la entidad Author relacionando las dos colecciones de la BBDD.
@@ -24,4 +24,4 @@ const bookSchema = new Schema<iBook>(
 );
 
 // Creamos un modelo para que siempre que creamos un book valide contra el Schema que hemos creado para ver si es valido.
-export const Book = mongoose.model<iBook>("Book", bookSchema);
+export const Book = mongoose.model<IBook>("Book", bookSchema);

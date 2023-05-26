@@ -20,7 +20,7 @@ export const resetAuthors = async (): Promise<void> => {
   try {
     await Author.collection.drop(); //  Esperamos a que borre los documentos de la colección author de la BBDD.
     console.log("Borrados authors");
-    const documents = authorList.map((user) => new Author(user));
+    const documents = authorList.map((author) => new Author(author));
     for (let i = 0; i < documents.length; i++) {
       const document = documents[i];
       await document.save();

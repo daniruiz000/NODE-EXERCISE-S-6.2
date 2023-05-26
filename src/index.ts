@@ -1,22 +1,15 @@
-// Importamos express.
 import express from "express";
-
-// Importamos librería cors:
 import cors from "cors";
 
-// Importamos los routers creados.
-import { bookRouter } from "./routes/book.routes"; //  LO IMPORTAMOS COMO UN OBJETO.
+import { infoReq } from "./middlewares/infoReq.middleware";
+import { checkError } from "./middlewares/error.middleware";
+
+import { bookRouter } from "./routes/book.routes";
 import { authorRouter } from "./routes/author.routes";
 import { publisherRouter } from "./routes/publisher.routes";
 
-import {
-  type Request,
-  type Response,
-  type NextFunction,
-  type ErrorRequestHandler
-} from "express";
-
 import { connect } from "./db"
+
 // --------------------------------------------------------------------------------------------
 
 //  Función asíncrona que gestiona nuestra API.
@@ -34,8 +27,6 @@ const main = async (): Promise<void> => {
   // Definimos el routerHome que será el encargado de manejar las peticiones a nuestras rutas en la raíz.
   const routerHome = express.Router();
 
-  // ENDPOINT DE /:
-
   // Endpoint de la Home de nuestra API.
   routerHome.get("/", (req, res) => {
     res.send(`Esta es la Home de nuestra API. Estamos usando la BBDD de ${database?.connection.name as string}`);
@@ -46,13 +37,8 @@ const main = async (): Promise<void> => {
     res.status(404).send("Lo sentimos :( No hemos encontrado la página requerida.");
   });
 
-  // Middlewares de aplicación(afecta a todas las rutas):
-  // Ejemplo de Middleware de logs en consola.
-  app.use((req: Request, res: Response, next: NextFunction) => {
-    const date = new Date();
-    console.log(`Petición de tipo ${req.method} a la url ${req.originalUrl} el ${date.toString()}`);
-    next(); // Continua el código
-  });
+  // Middleware previo de Info de la req.
+  app.use(infoReq);
 
   // Asignación de los routers para las diferentes rutas creadas:
   //  Usamos las rutas (el orden es importante más restrictivos a menos):
@@ -62,24 +48,8 @@ const main = async (): Promise<void> => {
   app.use("/book", bookRouter); //  Le decimos al app que utilice el bookRouter importado para gestionar las rutas que tengan "/book".
   app.use("/", routerHome); //  Decimos al app que utilice el routerHome en la raíz.
 
-  // Ejemplo de Middleware de gestión de errores.
-  app.use((err: ErrorRequestHandler, req: Request, res: Response, next: NextFunction) => {
-    console.log("*** INICIO DE ERROR ***");
-    console.log(`PETICIÓN FALLIDA: ${req.method} a la url ${req.originalUrl}`);
-    console.log(err);
-    console.log("*** FIN DE ERROR ***");
-
-    // Truco para quitar el tipo a una variable:
-    const errorAsAny: any = err as unknown as any
-
-    if (err?.name === "ValidationError") {
-      res.status(400).json(err);
-    } else if (errorAsAny?.indexOf("duplicate key") !== -1) {
-      res.status(400).json({ error: errorAsAny.errmsg });
-    } else {
-      res.status(500).json(err);
-    }
-  });
+  // Middleware de gestión de los Errores.
+  app.use(checkError);
 
   //  Levantamos el app en el puerto indicado:
   app.listen(PORT, () => {

@@ -14,7 +14,11 @@ export const resetPublishers = async (): Promise<void> => {
   try {
     await Publisher.collection.drop(); //  Esperamos a que borre los documentos de la colección publisher de la BBDD.
     console.log("Borrados publishers");
-    await Publisher.insertMany(publisherList); //  Esperamos a que inserte los nuevos documentos creados en la colección publisher de la BBDD.
+    const documents = publisherList.map((publisher) => new Publisher(publisher));
+    for (let i = 0; i < documents.length; i++) {
+      const document = documents[i];
+      await document.save();
+    }
     console.log("Creados publishers correctamente");
   } catch (error) {
     //  Si hay error lanzamos el error por consola.
