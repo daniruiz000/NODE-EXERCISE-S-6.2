@@ -1,5 +1,6 @@
 //  Importamos Mongoose
 import mongoose from "mongoose";
+
 import { type IBook } from "./Book";
 
 // Declaramos nuestro esquema que nos permite declarar nuestros objetos y crearle restricciones.
@@ -19,7 +20,7 @@ enum AllowedCountries {
 }
 
 // Interface de Publisher
-export interface IPublisher {
+interface IPublisher {
   name: string;
   country: AllowedCountries;
   books?: IBook[];

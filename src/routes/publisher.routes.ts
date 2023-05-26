@@ -13,6 +13,7 @@ import {
   type NextFunction,
 } from "express";
 
+// Router propio de publisher:
 export const publisherRouter = express.Router();
 
 // --------------------------------------------------------------------------------------------

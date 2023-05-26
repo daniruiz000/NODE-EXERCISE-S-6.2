@@ -1,4 +1,3 @@
-// Importamos el modelo
 import { Book } from "../models/Book";
 
 const bookList = [

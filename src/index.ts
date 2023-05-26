@@ -51,7 +51,7 @@ const main = async (): Promise<void> => {
   // Middleware de gestión de los Errores.
   app.use(checkError);
 
-  //  Levantamos el app en el puerto indicado:
+  // Levantamos el app en el puerto indicado:
   app.listen(PORT, () => {
     console.log(`Server levantado en puerto ${PORT}`);
   });

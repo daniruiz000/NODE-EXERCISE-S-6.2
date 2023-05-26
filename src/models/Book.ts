@@ -1,5 +1,5 @@
 //  Importamos Mongoose
-import mongoose from "mongoose";
+import mongoose, { type ObjectId } from "mongoose";
 
 // Declaramos nuestro esquema que nos permite declarar nuestros objetos y crearle restricciones.
 const Schema = mongoose.Schema;
@@ -7,9 +7,9 @@ const Schema = mongoose.Schema;
 // Interface de Book
 export interface IBook {
   title: string;
-  author: mongoose.Types.ObjectId;
+  author: ObjectId;
   pages: number;
-  publisher: mongoose.Types.ObjectId;
+  publisher: ObjectId;
 }
 
 // Creamos esquema del book:

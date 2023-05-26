@@ -23,16 +23,18 @@ export const bookRelations = async (): Promise<void> => {
       console.error("No hay editoriales en la BBDD.");
       return;
     }
+
     // Para cada libro recogido elegimos un autor y una editorial al azar entre los existentes y se lo asignamos como una propiedad a cada libro.
-    for (let i = 0; i < books.length; i++) {
+    const documents = books.map((book) => new Book(book));
+    for (let i = 0; i < documents.length; i++) {
       const book = books[i];
       const randomAuthor = author[generateRandom(0, author.length)];
       const randomPublisher = publisher[generateRandom(0, publisher.length)];
 
       book.author = randomAuthor as unknown as any;
       book.publisher = randomPublisher as unknown as any;
-
-      await book.save(); // Guardamos el libro creado con las nuevas propiedades.
+      const document = book;
+      await document.save();
     }
     console.log("Relaciones entre colecciones creadas correctamente");
   } catch (error) {
@@ -40,5 +42,3 @@ export const bookRelations = async (): Promise<void> => {
     console.error(error);
   }
 };
-
-module.exports = { bookRelations }; // Exportamos la función para poder usarla.
