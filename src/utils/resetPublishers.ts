@@ -25,5 +25,3 @@ export const resetPublishers = async (): Promise<void> => {
     console.error(error);
   }
 };
-
-module.exports = { resetPublishers }; // Exportamos la función para poder usarla.
