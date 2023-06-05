@@ -1,3 +1,9 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Book
+ *   description: The books managing API
+ */
 import express from "express";
 
 import { Book } from "../models/Book";
@@ -18,18 +24,34 @@ import {
 // Router propio de book:
 export const bookRouter = express.Router();
 
-// --------------------------------------------------------------------------------------------
-// --------------------------------- ENDPOINTS DE /book ---------------------------------------
-// --------------------------------------------------------------------------------------------
-
-/*  Endpoint para recuperar todos los books de manera paginada en función de un limite de elementos a mostrar
-por página para no saturar al navegador (CRUD: READ):
-*/
-
+/**
+ * @swagger
+ * /book:
+ *   get:
+ *     summary: Obtener todos los libros de manera paginada
+ *     parameters:
+ *       - name: limit
+ *         in: query
+ *         description: Límite de elementos por página
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - name: page
+ *         in: query
+ *         description: Número de página
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Éxito
+ *       400:
+ *         description: Parámetros inválidos
+ *       500:
+ *         description: Error del servidor
+ */
 bookRouter.get("/", checkParams, async (req: Request, res: Response, next: NextFunction) => {
-  // Si funciona la lectura...
   try {
-    // Recogemos las query params de esta manera req.query.parametro.
     const limit = req.query.limit as any;
     const page = req.query.page as any;
 
@@ -58,16 +80,27 @@ bookRouter.get("/", checkParams, async (req: Request, res: Response, next: NextF
   }
 });
 
-/* Ejemplo de REQ indicando que queremos la página 4 estableciendo un limite de 10 elementos
- por página (limit = 10 , pages = 4):
- http://localhost:3000/book?limit=10&page=4 */
-
-//  ------------------------------------------------------------------------------------------
-
-//  Endpoint para recuperar un book en concreto a través de su id ( modelo.findById()) (CRUD: READ):
-
+/**
+ * @swagger
+ * /book/{id}:
+ *   get:
+ *     summary: Obtener un libro por su ID
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: ID del libro
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Éxito
+ *       404:
+ *         description: Libro no encontrado
+ *       500:
+ *         description: Error del servidor
+ */
 bookRouter.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
-  // Si funciona la lectura...
   try {
     const id = req.params.id; //  Recogemos el id de los parametros de la ruta.
     const book = await Book.findById(id).populate(["author", "publisher"]); //  Buscamos un book con un id determinado dentro de nuestro modelo con modelo.findById(id a buscar).
@@ -76,19 +109,31 @@ bookRouter.get("/:id", async (req: Request, res: Response, next: NextFunction) =
     } else {
       res.status(404).json({}); //    Si no existe el book se manda un json vacio y un código 400.
     }
-
-    // Si falla la lectura...
   } catch (error) {
     next(error);
   }
 });
 
-// Ejemplo de REQ:
-// http://localhost:3000/book/id del book a buscar
-
-//  ------------------------------------------------------------------------------------------
-
-//  Endpoint para buscar un book por el title ( modelo.findById({firstName: name})) (CRUD: Operación Custom. No es CRUD):
+/**
+ * @swagger
+ * /book/title/{title}:
+ *   get:
+ *     summary: Buscar un libro por su título
+ *     parameters:
+ *       - name: title
+ *         in: path
+ *         description: Título del libro
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Éxito
+ *       404:
+ *         description: Libro no encontrado
+ *       500:
+ *         description: Error del servidor
+ */
 
 bookRouter.get("/title/:title", async (req: Request, res: Response, next: NextFunction) => {
   const title = req.params.title;
@@ -107,12 +152,25 @@ bookRouter.get("/title/:title", async (req: Request, res: Response, next: NextFu
   }
 });
 
-// Ejemplo de REQ:
-// http://localhost:3000/book/title/titulo del libro a buscar
-
-//  ------------------------------------------------------------------------------------------
-
-//  Endpoint para añadir elementos (CRUD: CREATE):
+/**
+ * @swagger
+ * /book:
+ *   post:
+ *     summary: Crear un nuevo libro
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Book'
+ *     responses:
+ *       201:
+ *         description: Libro creado exitosamente
+ *       400:
+ *         description: Datos inválidos proporcionados
+ *       500:
+ *         description: Error del servidor
+ */
 
 bookRouter.post("/", async (req: Request, res: Response, next: NextFunction) => {
   // Si funciona la escritura...
@@ -127,13 +185,24 @@ bookRouter.post("/", async (req: Request, res: Response, next: NextFunction) => 
   }
 });
 
-/* Petición tipo de POST para añadir un nuevo book (añadimos al body el nuevo book con sus propiedades que tiene que cumplir con el Scheme de nuestro modelo) identificado por su id:
- const newBook = {title: "Prueba title", pages: 255}
- fetch("http://localhost:3000/book/",{"body": JSON.stringify(newBook),"method":"POST","headers":{"Accept":"application/json","Content-Type":"application/json"}}).then((data)=> console.log(data)) */
-
-//  ------------------------------------------------------------------------------------------
-
-//  Endpoint para resetear los datos ejecutando cryptos:
+/**
+ * @swagger
+ * /book/reset:
+ *   delete:
+ *     summary: Resetear los datos ejecutando cryptos
+ *     parameters:
+ *       - name: all
+ *         in: query
+ *         description: Indicador para resetear todos los datos (opcional, por defecto es false)
+ *         required: false
+ *         schema:
+ *           type: boolean
+ *     responses:
+ *       200:
+ *         description: Datos reseteados exitosamente
+ *       500:
+ *         description: Error del servidor
+ */
 
 bookRouter.delete("/reset", async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -157,9 +226,26 @@ bookRouter.delete("/reset", async (req: Request, res: Response, next: NextFuncti
   }
 });
 
-//  ------------------------------------------------------------------------------------------
-
-//  Endpoint para eliminar book identificado por id (CRUD: DELETE):
+/**
+ * @swagger
+ * /book/{id}:
+ *   delete:
+ *     summary: Eliminar un libro por su ID
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: ID del libro
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Libro eliminado exitosamente
+ *       404:
+ *         description: Libro no encontrado
+ *       500:
+ *         description: Error del servidor
+ */
 
 bookRouter.delete("/:id", async (req: Request, res: Response, next: NextFunction) => {
   // Si funciona el borrado...
@@ -178,17 +264,36 @@ bookRouter.delete("/:id", async (req: Request, res: Response, next: NextFunction
   }
 });
 
-/* Petición tipo DELETE para eliminar un book  identificado por su id (no añadimos body a la busqueda y recogemos el id de los parametros de la ruta):
-
-fetch("http://localhost:3000/book/id del book a borrar",{"method":"DELETE","headers":{"Accept":"application/json","Content-Type":"application/json"}}).then((data)=> console.log(data))
-*/
-
-//  ------------------------------------------------------------------------------------------
-
-//  Endpoint para actualizar un elemento identificado por id (CRUD: UPDATE):
+/**
+ * @swagger
+ * /book/{id}:
+ *   put:
+ *     summary: Actualizar un libro por su ID
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: ID del libro
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Book'
+ *     responses:
+ *       200:
+ *         description: Libro actualizado exitosamente
+ *       400:
+ *         description: Datos inválidos proporcionados
+ *       404:
+ *         description: Libro no encontrado
+ *       500:
+ *         description: Error del servidor
+ */
 
 bookRouter.put("/:id", async (req: Request, res: Response, next: NextFunction) => {
-  // Si funciona la actualización...
   try {
     const id = req.params.id; //  Recogemos el id de los parametros de la ruta.
     const bookUpdated = await Book.findByIdAndUpdate(id, req.body, { new: true, runValidators: true }); // Esperamos que devuelva la info del book actualizado al que tambien hemos pasado un objeto con los campos q tiene que acualizar en la req del body de la petición. {new: true} Le dice que nos mande el book actualizado no el antiguo. Lo busca y elimina con el metodo findByIdAndDelete(id del book a eliminar).
@@ -197,15 +302,7 @@ bookRouter.put("/:id", async (req: Request, res: Response, next: NextFunction) =
     } else {
       res.status(404).json({}); //  Devolvemos un código 404 y un objeto vacio en caso de que no exista con ese id.
     }
-
-    // Si falla la actualización...
   } catch (error) {
     next(error);
   }
 });
-
-/* Petición tipo de PUT para actualizar datos concretos (en este caso el title) recogidos en el body,
-de un book en concreto (recogemos el id de los parametros de la ruta ):
-
-fetch("http://localhost:3000/book/id del book a actualizar",{"body": JSON.stringify({title:"El libro de las ilusiones."}),"method":"PUT","headers":{"Accept":"application/json","Content-Type":"application/json"}}).then((data)=> console.log(data))
-*/

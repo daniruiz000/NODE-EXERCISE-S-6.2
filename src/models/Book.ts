@@ -1,4 +1,29 @@
-//  Importamos Mongoose
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *    Book:
+ *      type: object
+ *      required:
+ *        - title
+ *        - author
+ *        - pages
+ *        - publisher
+ *      properties:
+ *        title:
+ *          type: string
+ *          description: Título del libro
+ *        author:
+ *          type: string
+ *          description: ID del autor del libro
+ *        pages:
+ *          type: number
+ *          description: Número de páginas del libro
+ *        publisher:
+ *          type: string
+ *          description: ID de la editorial del libro
+ */
+
 import mongoose, { type ObjectId } from "mongoose";
 
 // Declaramos nuestro esquema que nos permite declarar nuestros objetos y crearle restricciones.

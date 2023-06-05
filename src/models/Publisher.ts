@@ -1,4 +1,25 @@
-//  Importamos Mongoose
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *    Publisher:
+ *      type: object
+ *      required:
+ *        - name
+ *        - country
+ *      properties:
+ *        name:
+ *          type: string
+ *          description: Nombre de la editorial
+ *        country:
+ *          type: string
+ *          description: País de la editorial
+ *        books:
+ *          type: array
+ *          items:
+ *            $ref: '#/components/schemas/Book'
+ *          description: Libros publicados por la editorial
+ */
 import mongoose from "mongoose";
 
 import { type IBook } from "./Book";

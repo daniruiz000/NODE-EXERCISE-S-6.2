@@ -1,4 +1,9 @@
-// Importamos express:
+/**
+ * @swagger
+ * tags:
+ *   name: Author
+ *   description: The authors managing API
+ */
 import express from "express";
 import multer from "multer";
 import fs from "fs";
@@ -32,6 +37,33 @@ export const authorRouter = express.Router();
 por página para no saturar al navegador (CRUD: READ):
 */
 
+/**
+ * @swagger
+ * /author:
+ *   get:
+ *     summary: Recuperar todos los autores paginados
+ *     tags: [Author]
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         description: Número máximo de autores por página
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         description: Número de página
+ *     responses:
+ *       200:
+ *         description: Éxito - Devuelve la lista de autores paginados
+ *       400:
+ *         description: Error de parámetros de consulta
+ *       500:
+ *         description: Error del servidor
+ */
 authorRouter.get("/", checkParams, async (req: Request, res: Response, next: NextFunction) => {
   // Si funciona la lectura...
   try {
@@ -68,7 +100,27 @@ authorRouter.get("/", checkParams, async (req: Request, res: Response, next: Nex
 //  ------------------------------------------------------------------------------------------
 
 //  Endpoint para recuperar un author en concreto a través de su id ( modelo.findById()) (CRUD: READ):
-
+/**
+ * @swagger
+ * /author/{id}:
+ *   get:
+ *     summary: Recuperar un autor por su ID
+ *     tags: [Author]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del autor
+ *     responses:
+ *       200:
+ *         description: Éxito - Devuelve el autor correspondiente al ID
+ *       404:
+ *         description: Autor no encontrado
+ *       500:
+ *         description: Error del servidor
+ */
 authorRouter.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
   // Si funciona la lectura...
   try {
@@ -99,7 +151,27 @@ authorRouter.get("/:id", async (req: Request, res: Response, next: NextFunction)
 //  ------------------------------------------------------------------------------------------
 
 //  Endpoint para buscar un author por el nombre ( modelo.findById({name: name})) (CRUD: Operación Custom. No es CRUD):
-
+/**
+ * @swagger
+ * /author/name/{name}:
+ *   get:
+ *     summary: Buscar autores por nombre
+ *     tags: [Author]
+ *     parameters:
+ *       - in: path
+ *         name: name
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Nombre del autor a buscar
+ *     responses:
+ *       200:
+ *         description: Éxito - Devuelve la lista de autores encontrados
+ *       404:
+ *         description: Autores no encontrados
+ *       500:
+ *         description: Error del servidor
+ */
 authorRouter.get("/name/:name", async (req: Request, res: Response, next: NextFunction) => {
   const authorName = req.params.name;
   // Si funciona la lectura...
@@ -126,7 +198,30 @@ authorRouter.get("/name/:name", async (req: Request, res: Response, next: NextFu
 //  ------------------------------------------------------------------------------------------
 
 //  Endpoint para añadir elementos (CRUD: CREATE):
-
+/**
+ * @swagger
+ * /author:
+ *   post:
+ *     summary: Crear un nuevo autor
+ *     tags: [Author]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/AuthorInput'
+ *     responses:
+ *       201:
+ *         description: Autor creado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Author'
+ *       400:
+ *         description: Error de validación
+ *       500:
+ *         description: Error del servidor
+ */
 authorRouter.post("/", async (req: any, res: Response, next: NextFunction) => {
   // Si funciona la escritura...
   try {
@@ -163,6 +258,27 @@ authorRouter.delete("/reset", async (req: Request, res: Response, next: NextFunc
 
 //  Endpoint para eliminar author identificado por id (CRUD: DELETE):
 
+/**
+ * @swagger
+ * /author/{id}:
+ *   delete:
+ *     summary: Eliminar un autor
+ *     tags: [Author]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del autor a eliminar
+ *     responses:
+ *       204:
+ *         description: Autor eliminado exitosamente
+ *       404:
+ *         description: Autor no encontrado
+ *       500:
+ *         description: Error del servidor
+ */
 authorRouter.delete("/:id", isAuth, async (req: any, res: Response, next: NextFunction) => {
   // Si funciona el borrado...
   try {
@@ -193,7 +309,39 @@ fetch("http://localhost:3000/author/id del author a borrar",{"method":"DELETE","
 //  ------------------------------------------------------------------------------------------
 
 //  Endpoint para actualizar un elemento identificado por id pasando antes por el middleware de auntetificación (CRUD: UPDATE):
-
+/**
+ * @swagger
+ * /author/{id}:
+ *   put:
+ *     summary: Actualizar los datos de un autor
+ *     tags: [Author]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del autor a actualizar
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/AuthorInput'
+ *     responses:
+ *       200:
+ *         description: Autor actualizado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Author'
+ *       400:
+ *         description: Error de validación
+ *       404:
+ *         description: Autor no encontrado
+ *       500:
+ *         description: Error del servidor
+ */
 authorRouter.put("/:id", isAuth, async (req: any, res: Response, next: NextFunction) => {
   try {
     const id = req.params.id; //  Recogemos el id de los parametros de la ruta.
@@ -230,7 +378,52 @@ fetch("http://localhost:3000/author/id del author a actualizar",{"body": JSON.st
 
 //  Endpoint para asociar una imágen a una author:
 //  Hacemos uso del middleware que nos facilita multer para guardar la imágen en la carpeta de estáticos public.
-
+/**
+ * @swagger
+ * /author/image-upload:
+ *   post:
+ *     summary: Subir una imagen de perfil para un autor
+ *     tags: [Author]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Token de autenticación (Bearer token)
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *               authorId:
+ *                 type: string
+ *             required:
+ *               - image
+ *               - authorId
+ *     responses:
+ *       200:
+ *         description: Imagen de perfil del autor actualizada exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Author'
+ *       400:
+ *         description: Error de validación o campos faltantes
+ *       401:
+ *         description: No se tiene autorización para realizar esta operación
+ *       404:
+ *         description: Autor no encontrado
+ *       500:
+ *         description: Error del servidor
+ */
 authorRouter.post("/image-upload", isAuth, upload.single("image"), async (req: any, res: Response, next: NextFunction) => {
   try {
     const id = req.params.id; //  Recogemos el id de los parametros de la ruta.
@@ -266,7 +459,43 @@ authorRouter.post("/image-upload", isAuth, upload.single("image"), async (req: a
 //  ------------------------------------------------------------------------------------------
 
 //  Endpoint para login de autors:
-
+/**
+ * @swagger
+ * /author/login:
+ *   post:
+ *     summary: Iniciar sesión como autor
+ *     tags: [Author]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *             required:
+ *               - email
+ *               - password
+ *     responses:
+ *       200:
+ *         description: Inicio de sesión exitoso, devuelve un token JWT
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *       400:
+ *         description: Error de validación o campos faltantes
+ *       401:
+ *         description: Email y/o contraseña incorrectos
+ *       500:
+ *         description: Error del servidor
+ */
 authorRouter.post("/login", async (req: Request, res: Response, next: NextFunction) => {
   // Si funciona la escritura...
   try {

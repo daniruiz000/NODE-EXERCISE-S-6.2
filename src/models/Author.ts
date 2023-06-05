@@ -1,4 +1,47 @@
-//  Importamos Mongoose
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *    Author:
+ *      type: object
+ *      required:
+ *        - email
+ *        - password
+ *        - name
+ *        - country
+ *        - image
+ *      properties:
+ *        email:
+ *          type: string
+ *          format: email
+ *          description: Email del autor
+ *        password:
+ *          type: string
+ *          minLength: 8
+ *          description: Contraseña del autor
+ *        name:
+ *          type: string
+ *          minLength: 3
+ *          maxLength: 22
+ *          description: Nombre del autor
+ *        country:
+ *          type: string
+ *          enum:
+ *            - SPAIN
+ *            - COLOMBIA
+ *            - ENGLAND
+ *            - RUSSIA
+ *            - UNITED STATES
+ *            - ARGENTINA
+ *            - CZECHOSLOVAKIA
+ *            - JAPAN
+ *            - NIGERIA
+ *          description: País del autor
+ *        image:
+ *          type: string
+ *          description: URL de la imagen del autor
+ */
+
 import mongoose from "mongoose";
 
 import validator from "validator";
@@ -6,10 +49,8 @@ import bcrypt from "bcrypt";
 
 import { type IBook } from "./Book";
 
-// Declaramos nuestro esquema que nos permite declarar nuestros objetos y crearle restricciones.
 const Schema = mongoose.Schema;
 
-// Enum de países permitidos
 enum AllowedCountries {
   SPAIN = "SPAIN",
   COLOMBIA = "COLOMBIA",
@@ -22,7 +63,6 @@ enum AllowedCountries {
   NIGERIA = "NIGERIA",
 }
 
-// Interface de Autor
 interface IAuthor {
   email: string;
   password: string;
