@@ -1,3 +1,11 @@
+
+/**
+ * @swagger
+ * tags:
+ *   name: Publisher
+ *   description: Endpoints para la gestión de Publishers
+ */
+
 import express from "express";
 
 import { Publisher } from "../models/Publisher";
@@ -24,10 +32,29 @@ export const publisherRouter = express.Router();
 por página para no saturar al navegador (CRUD: READ):
 */
 
+/**
+ * @swagger
+ * /publisher:
+ *   get:
+ *     summary: Recupera todos los publishers de manera paginada en función de un límite de elementos por página.
+ *     tags: [Publisher]
+ *     responses:
+ *       200:
+ *         description: The list of the publishers
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Publisher'
+ *                 pagination:
+ *                   $ref: '#/components/schemas/Pagination'
+ */
 publisherRouter.get("/", checkParams, async (req: Request, res: Response, next: NextFunction) => {
-  // Si funciona la lectura...
   try {
-    // Recogemos las query params de esta manera req.query.parametro.
     const limit = req.query.limit as any;
     const page = req.query.page as any;
 
@@ -45,10 +72,7 @@ publisherRouter.get("/", checkParams, async (req: Request, res: Response, next: 
       currentPage: page,
       data: publishers,
     };
-    // Enviamos la respuesta como un json.
     res.json(response);
-
-    // Si falla la lectura...
   } catch (error) {
     next(error);
   }
@@ -62,8 +86,29 @@ publisherRouter.get("/", checkParams, async (req: Request, res: Response, next: 
 
 //  Endpoint para recuperar un publisher en concreto a través de su id ( modelo.findById()) (CRUD: READ):
 
+/**
+ * @swagger
+ * /publisher/{id}:
+ *   get:
+ *     summary: Recupera un publisher en concreto a través de su ID.
+ *     tags: [Publisher]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         description: ID del publisher
+ *     responses:
+ *       200:
+ *         description: The brand info
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Publisher'
+ *       404:
+ *         description: No encontrado
+ */
 publisherRouter.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
-  // Si funciona la lectura...
   try {
     const id = req.params.id; //  Recogemos el id de los parametros de la ruta.
     const publisher = await Publisher.findById(id); //  Buscamos un documentos con un id determinado dentro de nuestro modelo con modelo.findById(id a buscar).
@@ -79,8 +124,6 @@ publisherRouter.get("/:id", async (req: Request, res: Response, next: NextFuncti
     } else {
       res.status(404).json({}); //    Si no existe el publisher se manda un json vacio y un código 400.
     }
-
-    // Si falla la lectura...
   } catch (error) {
     next(error);
   }
@@ -92,7 +135,28 @@ publisherRouter.get("/:id", async (req: Request, res: Response, next: NextFuncti
 //  ------------------------------------------------------------------------------------------
 
 //  Endpoint para buscar un publisher por el nombre ( modelo.findById({name: name})) (CRUD: Operación Custom. No es CRUD):
-
+/**
+ * @swagger
+ * /publisher/name/{name}:
+ *   get:
+ *     summary: Busca un publisher por su nombre.
+ *     tags: [Publisher]
+ *     parameters:
+ *       - in: path
+ *         name: name
+ *         schema:
+ *           type: string
+ *         description: Nombre del publisher
+ *     responses:
+ *       200:
+ *         description: The brand info
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Publisher'
+ *       404:
+ *         description: No encontrado
+ */
 publisherRouter.get("/name/:name", async (req: Request, res: Response, next: NextFunction) => {
   const publisherName = req.params.name;
   // Si funciona la lectura...
@@ -119,7 +183,28 @@ publisherRouter.get("/name/:name", async (req: Request, res: Response, next: Nex
 //  ------------------------------------------------------------------------------------------
 
 //  Endpoint para añadir elementos (CRUD: CREATE):
-
+/**
+ * @swagger
+ * /publisher:
+ *   post:
+ *     summary: Crea un nuevo publisher.
+ *     tags: [Publisher]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Publisher'
+ *     responses:
+ *       201:
+ *         description: The brand was created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Publisher'
+ *       400:
+ *         description: The request body is incorrect or missing
+ */
 publisherRouter.post("/", async (req: Request, res: Response, next: NextFunction) => {
   // Si funciona la escritura...
   try {
@@ -139,7 +224,16 @@ publisherRouter.post("/", async (req: Request, res: Response, next: NextFunction
 //  ------------------------------------------------------------------------------------------
 
 //  Endpoint para resetear los datos de publisher:
-
+/**
+ * @swagger
+ * /publisher/reset:
+ *   get:
+ *     summary: Restablece la colección de publishers a su estado original.
+ *     tags: [Publisher]
+ *     responses:
+ *       200:
+ *         description: OK
+ */
 publisherRouter.delete("/reset", async (req: Request, res: Response, next: NextFunction) => {
   // Si funciona el reseteo...
   try {
@@ -154,10 +248,26 @@ publisherRouter.delete("/reset", async (req: Request, res: Response, next: NextF
 
 //  ------------------------------------------------------------------------------------------
 
-//  Endpoin para eliminar publisher identificado por id (CRUD: DELETE):
-
+//  Endpoint para eliminar publisher identificado por id (CRUD: DELETE):
+/**
+ * @swagger
+ * /publisher/{id}:
+ *   delete:
+ *     summary: Elimina un publisher existente.
+ *     tags: [Publisher]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         description: ID del publisher
+ *     responses:
+ *       204:
+ *         description: Sin contenido
+ *       404:
+ *         description: No encontrado
+ */
 publisherRouter.delete("/:id", async (req: Request, res: Response, next: NextFunction) => {
-  // Si funciona el borrado...
   try {
     const id = req.params.id; //  Recogemos el id de los parametros de la ruta.
     const publisherDeleted = await Publisher.findByIdAndDelete(id); // Esperamos a que nos devuelve la info del publisher eliminado que busca y elimina con el metodo findByIdAndDelete(id del publisher a eliminar).
@@ -166,8 +276,6 @@ publisherRouter.delete("/:id", async (req: Request, res: Response, next: NextFun
     } else {
       res.status(404).json({}); //  Devolvemos un código 404 y un objeto vacio en caso de que no exista con ese id.
     }
-
-    // Si falla el borrado...
   } catch (error) {
     next(error);
   }
@@ -180,8 +288,43 @@ fetch("http://localhost:3000/publisher/id del publisher a borrar",{"method":"DEL
 
 //  ------------------------------------------------------------------------------------------
 
-//  Endpoin para actualizar un elemento identificado por id (CRUD: UPDATE):
-
+//  Endpoint para actualizar un elemento identificado por id (CRUD: UPDATE):
+/**
+ * @swagger
+ * /publisher/{id}:
+ *   put:
+ *     summary: Actualiza un publisher existente.
+ *     tags: [Publisher]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         description: ID del publisher
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Nuevo nombre del publisher
+ *               country:
+ *                 type: string
+ *                 description: Nuevo país del publisher
+ *     responses:
+ *       200:
+ *         description: The brand was updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Publisher'
+ *       400:
+ *         description: Solicitud incorrecta
+ *       404:
+ *         description: No encontrado
+ */
 publisherRouter.put("/:id", async (req: Request, res: Response, next: NextFunction) => {
   // Si funciona la actualización...
   try {

@@ -6,10 +6,12 @@
   "scripts": {
     "lint": "eslint .",
     "start:pro": "npm run build && node ./dist/index.js",
-    "start": "ts-node-dev ./src/index.ts",
+    "start": "ts-node-dev --inspect -- ./src/index.ts",
     "build": "tsc",
     "lint:fix": "eslint --fix .",
+    "build-swagger-json": "ts-node-dev src/utils/generate-swagger-json.ts --ignore-watch",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "seed:all": "ts-node-dev ./src/seeds/author.seed.ts && ts-node-dev ./src/seeds/publisher.seed.ts && ts-node-dev ./src/seeds/book.seed.ts && ts-node-dev ./src/seeds/bookRelations.seed.ts --ignore-watch",
     "prepare": "husky install"
   },
   "repository": {
