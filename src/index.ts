@@ -3,11 +3,11 @@ import cors from "cors";
 
 import { infoReq } from "./middlewares/infoReq.middleware";
 import { checkError } from "./middlewares/error.middleware";
+import { mongoConnect } from "./middlewares/mongoConnect.middleware";
 
 import { bookRouter } from "./routes/book.routes";
 import { authorRouter } from "./routes/author.routes";
 import { publisherRouter } from "./routes/publisher.routes";
-import { mongoConnect } from "./middlewares/mongoConnect.middleware";
 
 import { swaggerOptions } from "./swagger-options";
 import swaggerJsDoc from "swagger-jsdoc"
@@ -16,7 +16,7 @@ import swaggerUiExpress from "swagger-ui-express"
 
 //  Configuración del server.
 const PORT = 3000; //  Definimos el puerto..
-const app = express(); // Definimos el app. Lo gestionará express.
+export const app = express(); // Definimos el app. Lo gestionará express.
 app.use(express.json()); // Sepa interpretar los JSON
 app.use(express.urlencoded({ extended: false })); //  Sepa interpretar bien los parametros de las rutas.
 app.use(cors({ origin: ["http://localhost:3000", "http://localhost:3001"] })); // Utilice la libreria cors para gestionar la seguridad de acceso a la API
@@ -60,8 +60,6 @@ app.use("/", routerHome); //  Decimos al app que utilice el routerHome en la ra�
 app.use(checkError);
 
 // Levantamos el app en el puerto indicado:
-app.listen(PORT, () => {
+export const server = app.listen(PORT, () => {
   console.log(`Server levantado en puerto ${PORT}`);
 });
-
-module.exports = app;
