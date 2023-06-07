@@ -6,9 +6,8 @@ import dotenv from "dotenv"
 dotenv.config();
 
 export const generateToken = (id: string, email: string): string => {
-  // Comprueba si han mandado userId o userEmail
   if (!id || !email) {
-    throw new Error("Email or userId missing"); // Fuerza un nuevo error y salta al catch
+    throw new Error("Email or userId missing");
   }
 
   const payload = {

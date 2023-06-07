@@ -51,7 +51,7 @@ import { type IBook } from "./Book";
 
 const Schema = mongoose.Schema;
 
-enum AllowedCountries {
+export enum AllowedCountries {
   SPAIN = "SPAIN",
   COLOMBIA = "COLOMBIA",
   ENGLAND = "ENGLAND",
@@ -63,12 +63,12 @@ enum AllowedCountries {
   NIGERIA = "NIGERIA",
 }
 
-interface IAuthor {
+export interface IAuthor {
   email: string;
   password: string;
   name: string;
   country: AllowedCountries;
-  image: string;
+  image?: string;
   books?: IBook[];
 }
 
