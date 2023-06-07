@@ -11,7 +11,7 @@
     "start:pro": "npm run build && node ./dist/src/index.js",
     "build": "tsc",
     "build:swagger-json": "ts-node-dev ./src/utils/generate-swagger-json.ts --ingore-watch",
-    "test": "cross-env DB_NAME=NODE-S16-TESTING-DB jest --silent",
+    "test": "cross-env DB_NAME=NODE-S-6-2-TEST jest --silent",
     "prepare": "husky install"
   },
   "keywords": [
